@@ -2,8 +2,9 @@
 title: "Project 1"
 author: "Tom Jeon"
 date: "September 10, 2016"
-output: 
-  pdf_document: 
+output:
+  html_document: default
+  pdf_document:
     latex_engine: xelatex
 ---
 
@@ -23,28 +24,30 @@ model, come up with ideas to improve rev􀁝enue.
 
 There are no dates, no tables to join, no feature engineering required, and the problem is pretty straightforward. I think this is a great starting point to get familiar with data science problems.
 
-### The Challenge
+### Challenge
 
 We have data about users who use this site: whether they converted or not as well as some of their characteristics such as their country, the marketing channel, their age, whether they are repeat users and the number of pages visited during their session (as a proxy for site activity/time spent on site).
 
 Your task is to:
+
     - Predict conversion rate.
     - Come up with recommendations for the product team and the marketing team to improve conversion rate.
 
 ### Data
 
-The table is "conversion_data". It has information about signed-in users during one session. Each row is a user session.
+The data is a CSV file called `conversion_data.csv`. It's included in the `Proj_1` directory on the [ugrid repo](https://github.com/tommyjee/ugrid) and it includes information about signed-in users during one session. Each row is a user session.
 
-```{r cars}
-summary(cars)
-```
+The columns:
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+* _country_: User country based on IP address
+* _age_: User age, self-reported at sign-in
+* *new_user*: Whether the user created the account during this session or already had an account
+* _source_: Marketing channel source
+    + Ads: Came to site through advertisement elsewhere
+    + Seo: Came to site through search results
+    + Direct: Came to site through typing URL on browser
+* *total_pages_visited*: number of total pages visited during the session. This is a proxy for time spent on site and engagement during the session
+* _converted_: Our response variable.
+    + 1 means they converted
+    + 0 means they left the site without buying anything
+    + Company's goal is to increase conversion rate: \frac{# of conversions}{total sessions}
