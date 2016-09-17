@@ -15,13 +15,23 @@ library(mosaic)
 library(manipulate)
 ```
 
-
+I only include sessions with an USA IP address in my dataset. Therefore, I only focus on the effect of `age`, `new_urser`, `source`, and `total_pages` on conversion rate. 
 ```{r,message=FALSE}
-conversion_data <-read.csv("/Users/Priscilla/Desktop/SMITH/2016 Fall/uGrid/Proj_1/conversion_data.csv")
+conversion_data <-read.csv("/Users/Priscilla/Desktop/SMITH/2016 Fall/uGrid_lwc/Proj_1/conversion_data.csv")
 conversion_data %>%
   slice(1:10)
 ```
 
+Missing value?
+The chunk below takes about 30 seconds. You might not wanna run it. `missmap` plots your dataset and highlight missing values:
+```{r}
+#library(Amelia)
+#missmap(conversion_data, main = "Missing values vs. observed")
+```
+No missing value. Good. 
+
+
+Next step: 
 ```{r}
 str(conversion_data)
 dim(conversion_data)
@@ -38,8 +48,25 @@ summary(conversion_data)
 ```
 
 
+```{r}
+boxplot(age ~ converted, data=conversion_data)
+```
+According to this boxplot, we might perdict that age is a crutial factor for conversion rate. It seems that the mean of age for people who left the site without buying anything  is higher. Also, there is more varibility in age for prople who did not book any room.
 
+I split the data into two chunks: training and testing set. The training set will be used to fit our model which we will be testing over the testing set.
+```{r}
+train <- conversion_data[1:130000,]
+test <- conversion_data[130001:178092,]
+```
 
+```{r}
+model_full <- glm(converted~ age + new_user + source+
+                    total_pages_visited,
+                  family=binomial(link='logit'),data=train)
+summary(model_full)
+```
+
+First of all, we can see that `sourceSeo` is not statistically significant. As for the statistically significant variables, `age`, `new_urser`, and `total_pages_visited` have the lowest p-value suggesting strong associations of those three variables with conversion rate. Also, only `total_pages_visited` has a positive coefficient, suggestiong that all other variables being equal, people who visit more pages are more likely to book a room.
 
 
 
