@@ -1,0 +1,45 @@
+---
+title: "uGrid Project 1"
+author: "Wencong Li"
+date: "September 17, 2016"
+output: html_document
+---
+
+```{r,include = FALSE, message=FALSE}
+library(ISLR)
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(GGally)
+library(mosaic)
+library(manipulate)
+```
+
+
+```{r,message=FALSE}
+conversion_data <-read.csv("/Users/Priscilla/Desktop/SMITH/2016 Fall/uGrid/Proj_1/conversion_data.csv")
+conversion_data %>%
+  slice(1:10)
+```
+
+```{r}
+str(conversion_data)
+dim(conversion_data)
+names(conversion_data)
+```
+
+`new_urser` and `converted` were shown as numerical variables, but they are categorical variables, so we need to convert them.
+```{r}
+summary(conversion_data)
+conversion_data <- conversion_data %>%
+  mutate(new_user = factor(new_user)) %>%
+  mutate(converted = factor(converted))
+summary(conversion_data)
+```
+
+
+
+
+
+
+
