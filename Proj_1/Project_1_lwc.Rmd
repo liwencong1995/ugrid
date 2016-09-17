@@ -68,5 +68,45 @@ summary(model_full)
 
 First of all, we can see that `sourceSeo` is not statistically significant. As for the statistically significant variables, `age`, `new_urser`, and `total_pages_visited` have the lowest p-value suggesting strong associations of those three variables with conversion rate. Also, only `total_pages_visited` has a positive coefficient, suggestiong that all other variables being equal, people who visit more pages are more likely to book a room.
 
+```{r}
+anova(model_full, test="Chisq")
+```
+
+The difference between the null deviance and the residual deviance shows how our model is doing against the null model (a model with only the intercept). The wider this gap, the better. Analyzing the table we can see the drop in deviance when adding each variable one at a time. Again, adding `age`, `new_user`, and `total_pages_visited` significantly reduces the residual deviance. `source` seem to improve the model less even though it has a low p-value. 
+
+Droping `source`: New Model
+```{r}
+model_2 <- glm(converted~ age + new_user +
+                    total_pages_visited,
+                  family=binomial(link='logit'),data=train)
+summary(model_2)
+```
+
+
+I did not have enought time to chhose a reasonable desicion boundary, so let's just use 0.5 as the boundary. If P(y=1|X) > 0.5 then y = 1 otherwise y=0.
+```{r}
+fitted.results <- predict(model_2, newdata =  subset(test, type = 'response'))
+fitted.results <- ifelse(fitted.results > 0.5,1,0)
+misClasificError <- mean(fitted.results != test$converted)
+print(paste('Accuracy',1-misClasificError))
+```
+
+The 0.983 accuracy on the test set is quite a good result. However, keep in mind that this result is somewhat dependent on the manual split of the data that I made earlier, therefore if you wish for a more precise score, you would be better off running some kind of cross validation such as k-fold cross validation.
+
+As a last step, we are going to plot the ROC curve and calculate the area under the curve, which are typical performance measurements for a binary classifier.
+```{r}
+library(ROCR)
+p <- predict(model_2, newdata=subset(test), type="response")
+pr <- prediction(p, test$converted)
+prf <- performance(pr, measure = "tpr", x.measure = "fpr")
+plot(prf)
+
+auc <- performance(pr, measure = "auc")
+auc <- auc@y.values[[1]]
+auc
+```
+
+
+
 
 
