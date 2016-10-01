@@ -1,0 +1,51 @@
+---
+title: "Untitled"
+author: "Wencong Li"
+date: "October 1, 2016"
+output: html_document
+---
+```{r}
+library(dplyr)
+test <- read.csv("/Users/Priscilla/Desktop/SMITH/2016 Fall/uGrid_tom/Proj_2/test_table.csv")
+urser <- read.csv("/Users/Priscilla/Desktop/SMITH/2016 Fall/uGrid_tom/Proj_2/user_table.csv")
+summary(test)
+test_new <- test %>%
+  filter(test == 1)
+test_control <- test %>%
+  filter(test == 0)
+summary(test_new)
+summary(test_control)
+test_new %>%
+  group_by(conversion) %>%
+  summarise(n())
+9379/(9379+206604)
+
+test_control %>%
+  group_by(conversion) %>%
+  summarise(n())
+13096/(224242+13096)
+
+```
+test : 0.04342471
+control : 0.05517869
+
+The old version is better!
+
+
+```{r}
+test_new_full <- test_new %>%
+  left_join(urser, by = "user_id")
+test_control_full <- test_control %>%
+  left_join(urser, by = "user_id")
+
+test_new_subset <- test_new_full %>%
+  filter(browser_language == "ES") %>%
+  select(sex, age, country)
+summary(test_new_subset)
+
+test_control_subset <- test_control_full %>%
+  filter(browser_language == "ES") %>%
+  select(sex, age, country)
+summary(test_control_subset)
+```
+
