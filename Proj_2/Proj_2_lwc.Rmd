@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Proj_2"
 author: "Wencong Li"
 date: "October 1, 2016"
 output: html_document
