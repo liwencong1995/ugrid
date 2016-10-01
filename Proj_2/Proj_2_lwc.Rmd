@@ -1,0 +1,55 @@
+---
+title: "Proj_2"
+author: "Priscilla Wencong Li"
+date: "October 1, 2016"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+```
+
+
+```{r}
+test <- read.csv("/Users/Priscilla/Desktop/SMITH/2016 Fall/uGrid_tom/Proj_2/test_table.csv")
+urser <- read.csv("/Users/Priscilla/Desktop/SMITH/2016 Fall/uGrid_tom/Proj_2/test_table.csv")
+```
+
+
+```{r}
+summary(test)
+test_new <- test %>%
+  filter(test == 1)
+test_control <- test %>%
+  filter(test == 0)
+summary(test_new)
+summary(test_control)
+```
+
+
+```{r}
+test_new %>%
+  group_by(conversion) %>%
+  summarise(n())
+9379/(9379+206604)
+
+test_control %>%
+  group_by(conversion) %>%
+  summarise(n())
+13096/(224242+13096)
+```
+test : 0.04342471
+
+control : 0.05517869
+
+The old version is better!
+
+```{r}
+test_new_full <- test_new %>%
+  right_join(urser, by = "user_id")
+```
+
+
+
+
+
